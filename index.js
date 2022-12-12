@@ -2,7 +2,10 @@ const canvas = document.getElementById('canvas')
 const infoBarGold = document.getElementById('infobar-gold')
 const infoBarHealth = document.getElementById('infobar-health')
 const infoBarDay = document.getElementById('infobar-day')
+const infoBarAge = document.getElementById('infobar-age')
 const ctx = canvas.getContext('2d')
+
+ctx.font = '16px sans-serif'
 
 const tileSize = 40
 const gridSpan = 16
@@ -11,6 +14,7 @@ let hovered = { x: null, y: null }
 let ship = { x: 2, y: 7 }
 let gold = 0
 let day = 1
+let age = 18
 let season = 1
 let seasonNames = ['Spring', 'Summer', 'Autumn', 'Winter']
 let health = 100
@@ -34,6 +38,7 @@ function init() {
   }
 
   grid = seedCoastline(grid)
+  updateInfobar()
   window.requestAnimationFrame(gameLoop)
 }
 
@@ -66,7 +71,9 @@ function draw() {
 
   // draw ship
   ctx.fillStyle = 'saddlebrown'
-  ctx.fillRect(ship.x * tileSize + 10, ship.y * tileSize + 15, 20, 10)
+  ctx.fillRect(ship.x * tileSize + 5, ship.y * tileSize + 16, 30, 8)
+  ctx.fillStyle = 'white'
+  ctx.fillRect(ship.x * tileSize + 15, ship.y * tileSize + 8, 4, 10)
 
   if (hovered.x !== null && hovered.y !== null) {
     let actionText = ''
@@ -87,7 +94,9 @@ function draw() {
       default:
         ''
     }
-    ctx.strokeText(actionText, hovered.x + 2, hovered.y + 40)
+
+    ctx.fillStyle = 'black'
+    ctx.fillText(actionText, hovered.x + 2, hovered.y + 40)
   }
 }
 
@@ -151,6 +160,7 @@ function advanceDay() {
 
     if (season > 4) {
       season = 1
+      age += 1
     }
   }
 
@@ -185,6 +195,7 @@ function updateInfobar() {
   infoBarGold.innerText = 'Gold: ' + gold
   infoBarHealth.innerText = 'Health: ' + health
   infoBarDay.innerText = 'Day: ' + day + ' of ' + seasonNames[season - 1]
+  infoBarAge.innerText = `${age} years old`
 }
 
 function resetGame() {
@@ -192,6 +203,7 @@ function resetGame() {
   health = 100
   day = 1
   season = 1
+  ship = { x: 2, y: 7 }
   init()
 }
 
